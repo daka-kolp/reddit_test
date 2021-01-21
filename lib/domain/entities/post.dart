@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:intl/intl.dart';
 
 class Post {
   final String author;
@@ -16,4 +17,6 @@ class Post {
     @required this.commentsAmount,
     @required this.url,
   });
+
+  String get dateAndTimeCreated => DateFormat.yMd().add_jm().format(created);
 }

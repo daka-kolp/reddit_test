@@ -1,11 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import 'package:reddit_app/app/home_page.dart';
+import 'package:reddit_app/data/repositories/reddit_user_%20repository.dart';
+import 'package:reddit_app/domain/repositories_contracts/user_repository.dart';
 
 void main() {
+  GetIt.I
+    ..registerSingleton<HttpClient>(HttpClient())
+    ..registerSingleton<UserRepository>(RedditUserRepository());
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,6 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      home: HomePage(),
     );
   }
 }

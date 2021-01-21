@@ -29,6 +29,7 @@ dependencies:
   json_serializable: ^3.5.1
   get_it: ^5.0.4
   path_provider: ^1.6.27
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
