@@ -12,7 +12,7 @@ RedditPostModel _$RedditPostModelFromJson(Map<String, dynamic> json) {
     json['title'] as String,
     json['selftext_html'] as String,
     (json['created'] as num)?.toDouble(),
-    json['url'] as String,
+    json['permalink'] as String,
     json['num_comments'] as int,
   );
 }

@@ -12,6 +12,7 @@ class RedditPostModel {
   final String selftext;
   @JsonKey(name: 'created')
   final double created;
+  @JsonKey(name: 'permalink')
   final String url;
   @JsonKey(name: 'num_comments')
   final int numComments;
@@ -32,7 +33,7 @@ class RedditPostModel {
       text: selftext,
       commentsAmount: numComments,
       created: DateTime.fromMillisecondsSinceEpoch(created.toInt() * 1000),
-      url: url,
+      url: 'https://www.reddit.com$url',
     );
   }
 
