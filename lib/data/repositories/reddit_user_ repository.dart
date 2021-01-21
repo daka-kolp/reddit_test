@@ -26,23 +26,23 @@ class RedditUserRepository implements UserRepository {
           .toList();
       return posts;
     } catch (e) {
-      print('getPosts(): $e');
+      print('RedditUserRepository getPosts(): $e');
       return [];
     }
   }
 
   @override
   Future<void> downloadPosts() async {
-    try {
-      final file = await _localFile;
+    final file = await _localFile;
 
-      final request = await _client.getUrl(Uri.parse(_endpoint));
-      final response = await request.close();
+    final request = await _client.getUrl(Uri.parse(_endpoint));
+    final response = await request.close();
+    try {
       await file.delete();
-      await response.pipe(file.openWrite());
     } catch (e) {
       print('RedditUserRepository downloadPosts(): $e');
     }
+    await response.pipe(file.openWrite());
   }
 
   Future<File> get _localFile async {

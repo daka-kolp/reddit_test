@@ -30,6 +30,9 @@ dependencies:
   get_it: ^5.0.4
   path_provider: ^1.6.27
   intl: ^0.16.1
+  bloc: ^6.1.1
+  flutter_bloc: ^6.1.1
+  equatable: ^1.2.5
 
 dev_dependencies:
   flutter_test:

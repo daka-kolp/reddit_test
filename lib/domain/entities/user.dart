@@ -10,7 +10,7 @@ class User {
 
   User._() : _userRepository = GetIt.I.get<UserRepository>();
 
-  Future<void> downloadPost() async {
+  Future<void> downloadPosts() async {
     await _userRepository.downloadPosts();
   }
 
