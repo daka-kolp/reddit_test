@@ -33,6 +33,7 @@ dependencies:
   bloc: ^6.1.1
   flutter_bloc: ^6.1.1
   equatable: ^1.2.5
+  connectivity: ^2.0.2
 
 dev_dependencies:
   flutter_test:

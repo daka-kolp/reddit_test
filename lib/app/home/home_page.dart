@@ -1,10 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:connectivity/connectivity.dart';
 
 import 'package:reddit_app/app/home/bloc/home_bloc.dart';
+import 'package:reddit_app/app/post/post_page.dart';
 import 'package:reddit_app/domain/entities/post.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  StreamSubscription _connectionListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _connectionListener = Connectivity().onConnectivityChanged.listen((result) {
+      context.read<HomeBloc>().add(UpdatePostsEvent());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,13 +51,31 @@ class HomePage extends StatelessWidget {
             final posts = snapshot.posts;
             return ListView.separated(
               itemCount: posts.length,
-              itemBuilder: (context, i) => _buildPostTile(posts[i]),
+              itemBuilder: (context, i) => _buildPostTile(context, posts[i]),
               separatorBuilder: (context, i) => Divider(),
             );
           }
           return Container();
         },
       ),
+    );
+  }
+
+  Widget _buildPostTile(BuildContext context, Post post) {
+    return ListTile(
+      title: Text(post.title),
+      subtitle: Text(
+          'Publish time: ${post.dateAndTimeCreated}\nComments ${post.commentsAmount}'),
+      onTap: () async {
+        var connectivityResult = await Connectivity().checkConnectivity();
+        if (connectivityResult == ConnectivityResult.none) {
+          _showSnackBar(context, 'Please, check connection to open the post');
+        } else {
+          await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PostPage(post)),
+          );
+        }
+      },
     );
   }
 
@@ -51,11 +88,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPostTile(Post post) {
-    return ListTile(
-      title: Text(post.title),
-      subtitle: Text(
-          'Publish time: ${post.dateAndTimeCreated}\nComments ${post.commentsAmount}'),
-    );
+  @override
+  dispose() {
+    _connectionListener.cancel();
+    super.dispose();
   }
 }
