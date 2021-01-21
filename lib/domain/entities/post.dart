@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
 
-class Post {
+class Post extends Equatable {
   final String author;
   final String title;
   final String text;
@@ -19,4 +20,7 @@ class Post {
   });
 
   String get dateAndTimeCreated => DateFormat.yMd().add_jm().format(created);
+
+  @override
+  List<Object> get props => [author, title, created, commentsAmount, url];
 }
