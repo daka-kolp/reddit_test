@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:reddit_app/domain/entities/post.dart';
 
 part 'reddit_post_model.g.dart';

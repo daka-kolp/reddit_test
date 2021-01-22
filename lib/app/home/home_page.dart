@@ -47,8 +47,7 @@ class HomePage extends StatelessWidget {
   Widget _buildPostTile(BuildContext context, Post post) {
     return ListTile(
       title: Text(post.title),
-      subtitle: Text(
-          'Publish time: ${post.dateAndTimeCreated}\nComments ${post.commentsAmount}'),
+      subtitle: Text('Publish time: ${post.dateAndTimeCreated}\nComments ${post.commentsAmount}'),
       onTap: () async {
         var connectivityResult = await Connectivity().checkConnectivity();
         if (connectivityResult == ConnectivityResult.none) {

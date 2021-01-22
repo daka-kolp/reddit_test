@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 
 import 'package:reddit_app/app/home/bloc/home_bloc.dart';
 import 'package:reddit_app/app/home/home_page.dart';
-import 'package:reddit_app/data/repositories/reddit_user_%20repository.dart';
+import 'package:reddit_app/data/repositories/reddit_user_repository.dart';
 import 'package:reddit_app/domain/repositories_contracts/user_repository.dart';
 
 void main() {

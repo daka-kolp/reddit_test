@@ -19,9 +19,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc()
       : user = User.I,
         super(InitialPostsState()) {
-    _connectionListener = Connectivity().onConnectivityChanged.listen((result) {
-      add(UpdatePostsEvent());
-    });
+    _connectionListener = Connectivity()
+        .onConnectivityChanged
+        .listen((result) => add(UpdatePostsEvent()));
     add(UpdatePostsEvent());
   }
 

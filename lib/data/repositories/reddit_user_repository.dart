@@ -22,8 +22,8 @@ class RedditUserRepository implements UserRepository {
       final data = await file.readAsString();
 
       final posts = jsonDecode(data)['data']['children']
-          .map<Post>((e) => RedditPostModel.fromJson(e['data']).postFromModel)
-          .toList();
+        .map<Post>((e) => RedditPostModel.fromJson(e['data']).postFromModel)
+        .toList();
       return posts;
     } catch (e) {
       print('RedditUserRepository getPosts(): $e');
@@ -55,3 +55,4 @@ class RedditUserRepository implements UserRepository {
     return directory.path;
   }
 }
+
