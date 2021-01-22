@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity/connectivity.dart';
@@ -8,22 +6,7 @@ import 'package:reddit_app/app/home/bloc/home_bloc.dart';
 import 'package:reddit_app/app/post/post_page.dart';
 import 'package:reddit_app/domain/entities/post.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  StreamSubscription _connectionListener;
-
-  @override
-  void initState() {
-    super.initState();
-    _connectionListener = Connectivity().onConnectivityChanged.listen((result) {
-      context.read<HomeBloc>().add(UpdatePostsEvent());
-    });
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           if (snapshot is LoadingState) {
             return Center(child: CircularProgressIndicator());
-          } else if (snapshot is FetchedPostsState) {
+          } else if (snapshot is FetchedPostsState || snapshot is ErrorState) {
             final posts = snapshot.posts;
             return ListView.separated(
               itemCount: posts.length,
@@ -86,11 +69,5 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(seconds: 3),
       ),
     );
-  }
-
-  @override
-  dispose() {
-    _connectionListener.cancel();
-    super.dispose();
   }
 }

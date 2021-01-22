@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 
@@ -13,9 +14,14 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final User user;
 
+  StreamSubscription _connectionListener;
+
   HomeBloc()
       : user = User.I,
         super(InitialPostsState()) {
+    _connectionListener = Connectivity().onConnectivityChanged.listen((result) {
+      add(UpdatePostsEvent());
+    });
     add(UpdatePostsEvent());
   }
 
@@ -23,18 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    if (event is GetPostsEvent) yield* _getPosts();
     if (event is UpdatePostsEvent) yield* _getUpdatePosts();
-  }
-
-  Stream<HomeState> _getPosts() async* {
-    yield LoadingState();
-    try {
-      _cashedPosts = await user.getPosts();
-      yield FetchedPostsState(_cashedPosts);
-    } catch (e) {
-      yield ErrorState(_cashedPosts, e.toString());
-    }
   }
 
   Stream<HomeState> _getUpdatePosts() async* {
@@ -50,5 +45,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       yield ErrorState(_cashedPosts, e.toString());
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await _connectionListener.cancel();
+    return super.close();
   }
 }
