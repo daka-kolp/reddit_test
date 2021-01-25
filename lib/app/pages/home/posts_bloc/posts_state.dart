@@ -25,5 +25,5 @@ class PostsLoadFailure extends PostsState {
 
   PostsLoadFailure(List<Post> posts, this.error) : super(posts);
 
-  List<Object> get props => [...super.props, error];
+  List<Object> get props => [...super.posts, error];
 }

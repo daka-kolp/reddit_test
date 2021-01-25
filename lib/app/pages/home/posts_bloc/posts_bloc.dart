@@ -37,7 +37,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       _cashedPosts = await news.getPosts();
       yield PostsFetched(_cashedPosts);
     } catch (e) {
-      yield PostsLoadFailure(_cashedPosts, 'Unknown error: ${e.error}');
+      yield PostsLoadFailure(_cashedPosts, 'Unknown error: $e');
     }
   }
 }
