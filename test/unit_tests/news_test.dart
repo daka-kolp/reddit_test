@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:mockito/mockito.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test/test.dart';
 
@@ -18,14 +19,14 @@ void main() {
       _news = News.I;
     });
 
-    test('check list', () async {
+    test('check list : success', () async {
       final posts = await _news.getPosts();
 
       expect(posts, equals(TypeMatcher<List<Post>>()));
       expect(posts.length, equals(26));
     });
 
-    test('check post', () async {
+    test('check post : success', () async {
       final posts = await _news.getPosts();
       expect(
         posts.first,
@@ -44,15 +45,26 @@ void main() {
   });
 }
 
+class MockClient extends Mock implements HttpClient {}
+
+class MockClientRequest extends Mock implements HttpClientRequest {}
+
+class MockClientResponse extends Mock implements HttpClientResponse {}
+
 class MockNewsRepository extends NewsRepository {
+  final MockClient _client;
+
   Map<String, dynamic> _postsJson;
 
-  MockNewsRepository() {
+  MockNewsRepository() : _client = MockClient() {
     _postsJson = json.decode(_fixture('posts.json'));
   }
 
   @override
-  Future<void> downloadPosts() async {}
+  Future<MockClientResponse> downloadPosts() async {
+    final request = await _client.getUrl(Uri.parse('https://www.reddit.com/r/FlutterDev.json'));
+    return await request.close();
+  }
 
   @override
   Future<List<Post>> getPosts() async {

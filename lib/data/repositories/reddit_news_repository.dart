@@ -32,7 +32,7 @@ class RedditNewsRepository implements NewsRepository {
   }
 
   @override
-  Future<void> downloadPosts() async {
+  Future<HttpClientResponse> downloadPosts() async {
     final file = await _localFile;
 
     final request = await _client.getUrl(Uri.parse(_endpoint));
@@ -43,6 +43,8 @@ class RedditNewsRepository implements NewsRepository {
       print('RedditNewsRepository downloadPosts(): $e');
     }
     await response.pipe(file.openWrite());
+
+    return response;
   }
 
   Future<File> get _localFile async {

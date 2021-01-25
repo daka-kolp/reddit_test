@@ -10,8 +10,8 @@ class News {
 
   News._() : _newsRepository = GetIt.I.get<NewsRepository>();
 
-  Future<void> downloadPosts() async {
-    await _newsRepository.downloadPosts();
+  Future<Stream> downloadPosts() async {
+    return await _newsRepository.downloadPosts();
   }
 
   Future<List<Post>> getPosts() async {
