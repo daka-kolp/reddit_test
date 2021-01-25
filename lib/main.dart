@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import 'package:reddit_app/app/home/bloc/home_bloc.dart';
-import 'package:reddit_app/app/home/home_page.dart';
+import 'package:reddit_app/app/pages/home/bloc/home_bloc.dart';
+import 'package:reddit_app/app/pages/home/home_page.dart';
 import 'package:reddit_app/data/repositories/reddit_news_repository.dart';
+import 'package:reddit_app/device/connection/connectivity_bloc.dart';
 import 'package:reddit_app/domain/repositories_contracts/news_repository.dart';
 
 void main() {
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ConnectivityBloc>(create: (context) => ConnectivityBloc()),
         BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
       ],
       child: MaterialApp(

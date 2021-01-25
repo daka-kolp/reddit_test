@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 
@@ -14,42 +13,31 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final News news;
 
-  StreamSubscription _connectionListener;
-
   HomeBloc()
       : news = News.I,
-        super(InitialPostsState()) {
-    _connectionListener = Connectivity()
-        .onConnectivityChanged
-        .listen((result) => add(UpdatePostsEvent()));
-    add(UpdatePostsEvent());
+        super(PostsInitial()) {
+    add(PostsUpdated());
   }
 
   List<Post> _cashedPosts = [];
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    if (event is UpdatePostsEvent) yield* _getUpdatePosts();
+    if (event is PostsUpdated) yield* _getUpdatePosts();
   }
 
   Stream<HomeState> _getUpdatePosts() async* {
-    yield LoadingState();
+    yield PostsLoadInProgress();
     try {
       try {
         await news.downloadPosts();
-      } on SocketException catch (e){
-        yield ConnectionErrorState(_cashedPosts, e.toString());
+      } on SocketException {
+        yield PostsLoadFailure(_cashedPosts, 'Impossible to download new posts');
       }
       _cashedPosts = await news.getPosts();
-      yield FetchedPostsState(_cashedPosts);
+      yield PostsFetched(_cashedPosts);
     } catch (e) {
-      yield ErrorState(_cashedPosts, e.toString());
+      yield PostsLoadFailure(_cashedPosts, 'Unknown error: ${e.error}');
     }
-  }
-
-  @override
-  Future<void> close() async {
-    await _connectionListener.cancel();
-    return super.close();
   }
 }
