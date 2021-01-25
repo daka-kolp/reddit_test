@@ -1,26 +1,26 @@
-part of 'home_bloc.dart';
+part of 'posts_bloc.dart';
 
-abstract class HomeState extends Equatable {
+abstract class PostsState extends Equatable {
   final List<Post> posts;
 
-  HomeState(this.posts);
+  PostsState(this.posts);
 
   List<Object> get props => [posts];
 }
 
-class PostsInitial extends HomeState {
+class PostsInitial extends PostsState {
   PostsInitial() : super([]);
 }
 
-class PostsFetched extends HomeState {
+class PostsFetched extends PostsState {
   PostsFetched(List<Post> posts) : super(posts);
 }
 
-class PostsLoadInProgress extends HomeState {
+class PostsLoadInProgress extends PostsState {
   PostsLoadInProgress() : super([]);
 }
 
-class PostsLoadFailure extends HomeState {
+class PostsLoadFailure extends PostsState {
   final String error;
 
   PostsLoadFailure(List<Post> posts, this.error) : super(posts);

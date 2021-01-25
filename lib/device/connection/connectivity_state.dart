@@ -1,6 +1,6 @@
 part of 'connectivity_bloc.dart';
 
-class ConnectivityState {
+class ConnectivityState extends Equatable {
   List<Object> get props => [];
 }
 

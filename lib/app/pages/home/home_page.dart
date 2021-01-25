@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:reddit_app/app/pages/home/bloc/home_bloc.dart';
+import 'package:reddit_app/app/pages/home/posts_bloc/posts_bloc.dart';
 import 'package:reddit_app/app/pages/post/post_page.dart';
 import 'package:reddit_app/app/utils/show_shack_bar.dart';
 import 'package:reddit_app/device/connection/connectivity_bloc.dart';
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.update),
-            onPressed: () => context.read<HomeBloc>().add(PostsUpdated()),
+            onPressed: () => context.read<PostsBloc>().add(PostsUpdated()),
           )
         ],
       ),
@@ -25,10 +25,10 @@ class HomePage extends StatelessWidget {
           if (snapshot is ConnectivityFailure) {
             showSnackBar(context, 'No network access');
           } else if (snapshot is ConnectivitySuccess) {
-            context.read<HomeBloc>().add(PostsUpdated());
+            context.read<PostsBloc>().add(PostsUpdated());
           }
         },
-        child: BlocConsumer<HomeBloc, HomeState>(
+        child: BlocConsumer<PostsBloc, PostsState>(
           listener: (context, snapshot) {
             if (snapshot is PostsLoadFailure) {
               showSnackBar(context, snapshot.error);

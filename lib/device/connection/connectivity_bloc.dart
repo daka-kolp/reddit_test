@@ -12,8 +12,8 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
 
   StreamSubscription _connectionListener;
 
-  ConnectivityBloc()
-      : _connectivity = Connectivity(),
+  ConnectivityBloc([Connectivity connectivity])
+      : _connectivity = connectivity ?? Connectivity(),
         super(ConnectivityInitial()) {
     _connectionListener = _connectivity
       .onConnectivityChanged
