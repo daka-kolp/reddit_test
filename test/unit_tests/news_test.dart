@@ -6,27 +6,27 @@ import 'package:test/test.dart';
 
 import 'package:reddit_app/data/models/reddit_post_model.dart';
 import 'package:reddit_app/domain/entities/post.dart';
-import 'package:reddit_app/domain/entities/user.dart';
-import 'package:reddit_app/domain/repositories_contracts/user_repository.dart';
+import 'package:reddit_app/domain/entities/news.dart';
+import 'package:reddit_app/domain/repositories_contracts/news_repository.dart';
 
 void main() {
   group('get posts', () {
-    GetIt.I.registerSingleton<UserRepository>(MockUserRepository());
-    User _user;
+    GetIt.I.registerSingleton<NewsRepository>(MockNewsRepository());
+    News _news;
 
     setUp(() {
-      _user = User.I;
+      _news = News.I;
     });
 
     test('check list', () async {
-      final posts = await _user.getPosts();
+      final posts = await _news.getPosts();
 
       expect(posts, equals(TypeMatcher<List<Post>>()));
       expect(posts.length, equals(26));
     });
 
     test('check post', () async {
-      final posts = await _user.getPosts();
+      final posts = await _news.getPosts();
       expect(
         posts.first,
         equals(
@@ -44,10 +44,10 @@ void main() {
   });
 }
 
-class MockUserRepository extends UserRepository {
+class MockNewsRepository extends NewsRepository {
   Map<String, dynamic> _postsJson;
 
-  MockUserRepository() {
+  MockNewsRepository() {
     _postsJson = json.decode(_fixture('posts.json'));
   }
 

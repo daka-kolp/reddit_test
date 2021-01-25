@@ -6,18 +6,18 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:reddit_app/domain/entities/post.dart';
-import 'package:reddit_app/domain/entities/user.dart';
+import 'package:reddit_app/domain/entities/news.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final User user;
+  final News news;
 
   StreamSubscription _connectionListener;
 
   HomeBloc()
-      : user = User.I,
+      : news = News.I,
         super(InitialPostsState()) {
     _connectionListener = Connectivity()
         .onConnectivityChanged
@@ -36,11 +36,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     yield LoadingState();
     try {
       try {
-        await user.downloadPosts();
+        await news.downloadPosts();
       } on SocketException catch (e){
         yield ConnectionErrorState(_cashedPosts, e.toString());
       }
-      _cashedPosts = await user.getPosts();
+      _cashedPosts = await news.getPosts();
       yield FetchedPostsState(_cashedPosts);
     } catch (e) {
       yield ErrorState(_cashedPosts, e.toString());

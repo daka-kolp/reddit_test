@@ -6,14 +6,14 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:reddit_app/data/models/reddit_post_model.dart';
 import 'package:reddit_app/domain/entities/post.dart';
-import 'package:reddit_app/domain/repositories_contracts/user_repository.dart';
+import 'package:reddit_app/domain/repositories_contracts/news_repository.dart';
 
 const String _endpoint = 'https://www.reddit.com/r/FlutterDev.json';
 
-class RedditUserRepository implements UserRepository {
+class RedditNewsRepository implements NewsRepository {
   final HttpClient _client;
 
-  RedditUserRepository() : _client = GetIt.I.get<HttpClient>();
+  RedditNewsRepository() : _client = GetIt.I.get<HttpClient>();
 
   @override
   Future<List<Post>> getPosts() async {
@@ -26,7 +26,7 @@ class RedditUserRepository implements UserRepository {
         .toList();
       return posts;
     } catch (e) {
-      print('RedditUserRepository getPosts(): $e');
+      print('RedditNewsRepository getPosts(): $e');
       return [];
     }
   }
@@ -40,7 +40,7 @@ class RedditUserRepository implements UserRepository {
     try {
       await file.delete();
     } catch (e) {
-      print('RedditUserRepository downloadPosts(): $e');
+      print('RedditNewsRepository downloadPosts(): $e');
     }
     await response.pipe(file.openWrite());
   }

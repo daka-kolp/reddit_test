@@ -6,13 +6,13 @@ import 'package:get_it/get_it.dart';
 
 import 'package:reddit_app/app/home/bloc/home_bloc.dart';
 import 'package:reddit_app/app/home/home_page.dart';
-import 'package:reddit_app/data/repositories/reddit_user_repository.dart';
-import 'package:reddit_app/domain/repositories_contracts/user_repository.dart';
+import 'package:reddit_app/data/repositories/reddit_news_repository.dart';
+import 'package:reddit_app/domain/repositories_contracts/news_repository.dart';
 
 void main() {
   GetIt.I
     ..registerSingleton<HttpClient>(HttpClient())
-    ..registerSingleton<UserRepository>(RedditUserRepository());
+    ..registerSingleton<NewsRepository>(RedditNewsRepository());
 
   runApp(MyApp());
 }
