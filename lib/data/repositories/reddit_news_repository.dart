@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -18,13 +19,8 @@ class RedditNewsRepository implements NewsRepository {
   @override
   Future<List<Post>> getPosts() async {
     try {
-      final file = await _localFile;
-      final data = await file.readAsString();
-
-      final posts = jsonDecode(data)['data']['children']
-        .map<Post>((e) => RedditPostModel.fromJson(e['data']).postFromModel)
-        .toList();
-      return posts;
+      final data = await _localFile.then((file) => file.readAsString());
+      return await compute(_dataToPostList, data);
     } catch (e) {
       print('RedditNewsRepository getPosts(): $e');
       return [];
@@ -33,16 +29,18 @@ class RedditNewsRepository implements NewsRepository {
 
   @override
   Future<void> downloadPosts() async {
-    final file = await _localFile;
-
-    final request = await _client.getUrl(Uri.parse(_endpoint));
-    final response = await request.close();
-    try {
-      await file.delete();
-    } catch (e) {
-      print('RedditNewsRepository downloadPosts(): $e');
-    }
-    await response.pipe(file.openWrite());
+    await _client.getUrl(Uri.parse(_endpoint)).then(
+      (request) async {
+        final response = await request.close();
+        final file = await _localFile;
+        try {
+          await file.delete();
+        } catch (e) {
+          print('RedditNewsRepository downloadPosts(): $e');
+        }
+        await response.pipe(file.openWrite());
+      },
+    );
   }
 
   Future<File> get _localFile async {
@@ -56,3 +54,8 @@ class RedditNewsRepository implements NewsRepository {
   }
 }
 
+List<Post> _dataToPostList(String data) {
+  return jsonDecode(data)['data']['children']
+      .map<Post>((e) => RedditPostModel.fromJson(e['data']).postFromModel)
+      .toList();
+}
