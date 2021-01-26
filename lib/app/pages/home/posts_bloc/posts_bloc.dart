@@ -19,8 +19,6 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     add(PostsUpdated());
   }
 
-  List<Post> _cashedPosts = [];
-
   @override
   Stream<PostsState> mapEventToState(PostsEvent event) async* {
     if (event is PostsUpdated) yield* _getUpdatePosts();
@@ -32,12 +30,12 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       try {
         await news.downloadPosts();
       } on SocketException {
-        yield PostsLoadFailure(_cashedPosts, 'Impossible to download new posts');
+        yield PostsLoadFailure('Impossible to download new posts');
       }
-      _cashedPosts = await news.getPosts();
-      yield PostsFetched(_cashedPosts);
+      final posts = await news.getPosts();
+      yield PostsFetched(posts);
     } catch (e) {
-      yield PostsLoadFailure(_cashedPosts, 'Unknown error: $e');
+      yield PostsLoadFailure('Unknown error: $e');
     }
   }
 }

@@ -35,7 +35,6 @@ void main() {
       build: () => _connectivityBloc,
       act: (bloc) {
         _connectivity.connectivityCase = ConnectivityCase.success;
-        bloc.add(ConnectivityChecked());
       },
       expect: [ConnectivitySuccess()],
     );

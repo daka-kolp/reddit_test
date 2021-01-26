@@ -37,8 +37,7 @@ class HomePage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot is PostsLoadInProgress) {
               return Center(child: CircularProgressIndicator());
-            } else if (snapshot is PostsFetched ||
-                snapshot is PostsLoadFailure) {
+            } else if (snapshot is PostsFetched) {
               final posts = snapshot.posts;
               return ListView.separated(
                 itemCount: posts.length,
@@ -59,7 +58,9 @@ class HomePage extends StatelessWidget {
       subtitle: Text('Publish time: ${post.dateAndTimeCreated}\nComments ${post.commentsAmount}'),
       onTap: () async {
         final connectivityState = context.read<ConnectivityBloc>().state;
-        if (connectivityState is ConnectivitySuccess) {
+        if (connectivityState is ConnectivityFailure) {
+          showSnackBar(context, 'Please, check connection to open the post');
+        } else if (connectivityState is ConnectivitySuccess) {
           await Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => PostPage(post)),
           );

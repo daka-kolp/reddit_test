@@ -1,29 +1,29 @@
 part of 'posts_bloc.dart';
 
 abstract class PostsState extends Equatable {
+  List<Object> get props => [];
+}
+
+class PostsInitial extends PostsState {
+  PostsInitial();
+}
+
+class PostsFetched extends PostsState {
   final List<Post> posts;
 
-  PostsState(this.posts);
+  PostsFetched(this.posts);
 
   List<Object> get props => [posts];
 }
 
-class PostsInitial extends PostsState {
-  PostsInitial() : super([]);
-}
-
-class PostsFetched extends PostsState {
-  PostsFetched(List<Post> posts) : super(posts);
-}
-
 class PostsLoadInProgress extends PostsState {
-  PostsLoadInProgress() : super([]);
+  PostsLoadInProgress();
 }
 
 class PostsLoadFailure extends PostsState {
   final String error;
 
-  PostsLoadFailure(List<Post> posts, this.error) : super(posts);
+  PostsLoadFailure(this.error);
 
-  List<Object> get props => [...super.posts, error];
+  List<Object> get props => [error];
 }
