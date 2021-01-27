@@ -19,6 +19,8 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  int _indexOfWidget = 0;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,33 @@ class _PostPageState extends State<PostPage> {
       },
       child: Scaffold(
         appBar: AppBar(title: Text(widget.post.title)),
-        body: WebView(initialUrl: widget.post.url),
+        body: IndexedStack(
+          index: _indexOfWidget,
+          children: [
+            _buildPlaceholder(),
+            WebView(
+              javascriptMode: JavascriptMode.unrestricted,
+              initialUrl: widget.post.url,
+              onPageStarted: (value) => setState(() => _indexOfWidget = 0),
+              onPageFinished: (value) => setState(() => _indexOfWidget = 1),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const LinearProgressIndicator(),
+            Text('Loading the page. Please wait...'),
+          ],
+        ),
       ),
     );
   }
