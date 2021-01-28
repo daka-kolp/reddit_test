@@ -41,12 +41,7 @@ class _PostPageState extends State<PostPage> {
           index: _indexOfWidget,
           children: [
             _buildPlaceholder(),
-            WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: widget.post.url,
-              onPageStarted: (value) => setState(() => _indexOfWidget = 0),
-              onPageFinished: (value) => setState(() => _indexOfWidget = 1),
-            ),
+            _buildWebView(),
           ],
         ),
       ),
@@ -65,6 +60,15 @@ class _PostPageState extends State<PostPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildWebView() {
+    return WebView(
+      initialUrl: widget.post.url,
+      javascriptMode: JavascriptMode.unrestricted,
+      onPageStarted: (value) => setState(() => _indexOfWidget = 0),
+      onPageFinished: (value) => setState(() => _indexOfWidget = 1),
     );
   }
 }
