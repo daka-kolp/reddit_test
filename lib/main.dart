@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ConnectivityBloc>(create: (context) => ConnectivityBloc()),
-        BlocProvider<PostsBloc>(create: (context) => PostsBloc()),
+        BlocProvider<ConnectivityBloc>(create: (context) => ConnectivityBloc()..add(ConnectivityChecked())),
+        BlocProvider<PostsBloc>(create: (context) => PostsBloc()..add(PostsUpdated())),
       ],
       child: MaterialApp(
         title: 'Reddit',

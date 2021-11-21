@@ -16,22 +16,24 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
       : _connectivity = connectivity ?? Connectivity(),
         super(ConnectivityInitial()) {
     _connectionListener = _connectivity
-      .onConnectivityChanged
-      .listen((result) => add(ConnectivityChecked()));
-    add(ConnectivityChecked());
+        .onConnectivityChanged
+        .listen((result) {
+      try {
+        on<ConnectivityChecked>((event, emit) => _getConnectivityState(emit));
+      } catch (e) {
+        print(e);
+      }
+    });
+    on<ConnectivityChecked>((event, emit) => _getConnectivityState(emit));
   }
 
-  @override
-  Stream<ConnectivityState> mapEventToState(ConnectivityEvent event) async* {
-    if (event is ConnectivityChecked) yield* _getConnectivityState();
-  }
 
-  Stream<ConnectivityState> _getConnectivityState() async* {
+  Future<void> _getConnectivityState(Emitter emit) async {
     var connectivityResult = await _connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      yield ConnectivityFailure();
+      emit( ConnectivityFailure());
     } else {
-      yield ConnectivitySuccess();
+      emit( ConnectivitySuccess());
     }
   }
 

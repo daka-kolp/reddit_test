@@ -36,7 +36,7 @@ void main() {
       act: (bloc) {
         _connectivity.connectivityCase = ConnectivityCase.success;
       },
-      expect: [ConnectivitySuccess()],
+      expect: () => [ConnectivitySuccess()],
     );
 
     blocTest(
@@ -45,7 +45,7 @@ void main() {
       act: (bloc) {
         _connectivity.connectivityCase = ConnectivityCase.error;
       },
-      expect: [ConnectivityFailure()],
+      expect: () => [ConnectivityFailure()],
     );
   });
 
@@ -67,7 +67,7 @@ void main() {
     blocTest(
       'emits PostsStates when PostsUpdated() is added',
       build: () => _postsBloc,
-      expect: [
+      expect: () => [
         PostsLoadInProgress(),
         PostsFetched([
           Post(

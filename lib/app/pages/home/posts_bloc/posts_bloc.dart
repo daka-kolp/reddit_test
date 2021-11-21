@@ -16,26 +16,22 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   PostsBloc()
       : news = News.I,
         super(PostsInitial()) {
-    add(PostsUpdated());
+    on<PostsUpdated>((event, emit) => _getUpdatePosts(emit));
+
   }
 
-  @override
-  Stream<PostsState> mapEventToState(PostsEvent event) async* {
-    if (event is PostsUpdated) yield* _getUpdatePosts();
-  }
-
-  Stream<PostsState> _getUpdatePosts() async* {
-    yield PostsLoadInProgress();
+  Future<void> _getUpdatePosts(Emitter emit) async {
+    emit( PostsLoadInProgress());
     try {
       try {
         await news.downloadPosts();
       } on SocketException {
-        yield PostsLoadFailure('Impossible to download new posts');
+        emit (PostsLoadFailure('Impossible to download new posts'));
       }
       final posts = await news.getPosts();
-      yield PostsFetched(posts);
+      emit( PostsFetched(posts));
     } catch (e) {
-      yield PostsLoadFailure('Unknown error: $e');
+      emit (PostsLoadFailure('Unknown error: $e'));
     }
   }
 }
