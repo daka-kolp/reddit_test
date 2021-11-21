@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 
 part 'connectivity_event.dart';
+
 part 'connectivity_state.dart';
 
 class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
@@ -15,9 +16,7 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
   ConnectivityBloc([Connectivity connectivity])
       : _connectivity = connectivity ?? Connectivity(),
         super(ConnectivityInitial()) {
-    _connectionListener = _connectivity
-        .onConnectivityChanged
-        .listen((result) {
+    _connectionListener = _connectivity.onConnectivityChanged.listen((result) {
       try {
         on<ConnectivityChecked>((event, emit) => _getConnectivityState(emit));
       } catch (e) {
@@ -27,13 +26,12 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     on<ConnectivityChecked>((event, emit) => _getConnectivityState(emit));
   }
 
-
   Future<void> _getConnectivityState(Emitter emit) async {
     var connectivityResult = await _connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      emit( ConnectivityFailure());
+      emit(ConnectivityFailure());
     } else {
-      emit( ConnectivitySuccess());
+      emit(ConnectivitySuccess());
     }
   }
 

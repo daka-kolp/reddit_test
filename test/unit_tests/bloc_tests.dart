@@ -32,7 +32,7 @@ void main() {
 
     blocTest(
       'emits ConnectivitySuccess() if network connection active',
-      build: () => _connectivityBloc,
+      build: () => _connectivityBloc..add(ConnectivityChecked()),
       act: (bloc) {
         _connectivity.connectivityCase = ConnectivityCase.success;
       },
@@ -41,7 +41,7 @@ void main() {
 
     blocTest(
       'emits ConnectivityFailure() if no network connection',
-      build: () => _connectivityBloc,
+      build: () => _connectivityBloc..add(ConnectivityChecked()),
       act: (bloc) {
         _connectivity.connectivityCase = ConnectivityCase.error;
       },
@@ -66,7 +66,7 @@ void main() {
 
     blocTest(
       'emits PostsStates when PostsUpdated() is added',
-      build: () => _postsBloc,
+      build: () => _postsBloc..add(PostsUpdated()),
       expect: () => [
         PostsLoadInProgress(),
         PostsFetched([
